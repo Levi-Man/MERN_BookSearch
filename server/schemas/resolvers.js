@@ -10,7 +10,7 @@ const resolvers = {
       });
 
       if (!foundUser) {
-        throw new Error('Cannot find a user with this id!');
+        throw new Error('Cannot find a usgit aer with this id!');
       }
 
       return foundUser;
