@@ -18,10 +18,7 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.2",
-    "@apollo/server": "^4.7.1",
-    "express": "^4.17.2",
-    "graphql": "^16.6.0",
-    "mongoose": "^7.0.2"
+    "graphql": "^16.6.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

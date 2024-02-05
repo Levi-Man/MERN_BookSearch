@@ -6,9 +6,13 @@ import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
-  const [addUser, { error }] = useMutation(ADD_USER);
+  const [addUser, {error}] = useMutation(ADD_USER);
   // set initial form state
-  const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
+  const [userFormData, setUserFormData] = useState({ 
+    username: '', 
+    email: '', 
+    password: '' 
+  });
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
@@ -34,7 +38,10 @@ const SignupForm = () => {
         variables: { ...userFormData },
       });
 
-      Auth.login(data.addUser.token);
+      const {user, token} = await data.addUser;
+      console.log(user);
+
+      Auth.login(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
