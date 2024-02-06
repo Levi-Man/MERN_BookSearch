@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+
 import {
   Container,
   Card,
@@ -10,13 +10,13 @@ import {
 import { REMOVE_BOOK } from '../utils/mutations';
 import { QUERY_ME } from '../utils/queries'
 import { useMutation, useQuery } from '@apollo/client';
-import { getMe, deleteBook } from '../utils/API';
+// import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
   const [ removeBook, {error} ] = useMutation(REMOVE_BOOK);
-  const { data, loading } = useQuery(QUERY_ME);
+  const { data, loading , refetch} = useQuery(QUERY_ME);
   let userData = data?.me || {};
   console.log(userData);
 
@@ -31,7 +31,9 @@ const SavedBooks = () => {
        await removeBook({
         variables: { bookId: bookId }
     });
-
+    const { data } = await refetch();
+    // userData = data.me;
+   
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -46,7 +48,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div fluid="true" className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
@@ -82,3 +84,4 @@ const SavedBooks = () => {
 };
 
 export default SavedBooks;
+

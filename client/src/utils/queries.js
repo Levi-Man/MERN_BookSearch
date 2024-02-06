@@ -2,12 +2,11 @@ import { gql } from '@apollo/client';
 
 // Define the QUERY_ME query
 export const QUERY_ME = gql`
-  query {
+  query me {
     me {
       _id
       username
       email
-      bookCount
       savedBooks {
         bookId
         authors

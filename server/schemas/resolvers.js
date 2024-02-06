@@ -7,11 +7,15 @@ const resolvers = {
     // Resolver for getting a single user by either their id or their username
     me: async (parent, args, context) => {
       if (context.user) {
-        const foundUser = await User.findOne({
+        return User.findOne({
           _id: context.user._id
         });
       }
       throw new AuthenticationError('Cannot find a user with this id!');
+    },
+    users: async () => {
+      return User.find()
+        .select('-__v -password');
     },
   },
   Mutation: {
@@ -35,7 +39,7 @@ const resolvers = {
         throw new AuthenticationError("Can't find this user");
       }
 
-      const correctPw = await user.isCorrectPassword(body.password);
+      const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
         throw new AuthenticationError('Wrong password!');
@@ -46,7 +50,7 @@ const resolvers = {
     },
 
     // Resolver for saving a book to a user's `savedBooks` field
-    saveBook: async (_, { input }, context) => {
+    saveBook: async (parent, { input }, context) => {
       try {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
@@ -61,18 +65,20 @@ const resolvers = {
     },
 
     // Resolver for removing a book from `savedBooks`
-    removeBook: async (_, { user, params }, context) => {
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user){
       const updatedUser = await User.findOneAndUpdate(
-        { _id: user._id },
-        { $pull: { savedBooks: { bookId: params.bookId } } },
+        { _id: context.user._id },
+        { $pull: { savedBooks: { bookId: bookId }} },
         { new: true }
-      );
+      )
+      return updatedUser;
+      };
 
       if (!updatedUser) {
         throw new AuthenticationError("Couldn't find user with this id!");
       }
 
-      return updatedUser;
     },
   },
 };
